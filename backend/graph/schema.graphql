@@ -1,0 +1,63 @@
+# This schema represents a Todo application API
+# Every type, query, and mutation is used by the React frontend
+
+scalar DateTime
+
+# Todo represents a single task item
+type Todo {
+  # Unique identifier for the todo
+  id: ID!
+  # Title of the todo
+  title: String!
+  # Optional detailed description
+  description: String
+  # Whether the todo is completed
+  completed: Boolean!
+  # When the todo was created
+  createdAt: DateTime!
+  # When the todo was last updated
+  updatedAt: DateTime!
+}
+
+# Input for creating a new todo
+input CreateTodoInput {
+  title: String!
+  description: String
+}
+
+# Input for updating an existing todo
+input UpdateTodoInput {
+  title: String
+  description: String
+  completed: Boolean
+}
+
+# Filter options for querying todos
+input TodoFilter {
+  # Filter by completion status
+  completed: Boolean
+  # Search by title or description
+  search: String
+}
+
+# Root query type - all read operations
+type Query {
+  # Get all todos with optional filtering
+  todos(filter: TodoFilter): [Todo!]!
+  # Get a specific todo by ID
+  todo(id: ID!): Todo
+  # Count total todos
+  todoCount: Int!
+}
+
+# Root mutation type - all write operations
+type Mutation {
+  # Create a new todo
+  createTodo(input: CreateTodoInput!): Todo!
+  # Update an existing todo
+  updateTodo(id: ID!, input: UpdateTodoInput!): Todo
+  # Delete a todo
+  deleteTodo(id: ID!): Boolean!
+  # Toggle completion status
+  toggleTodo(id: ID!): Todo
+}
